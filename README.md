@@ -1,49 +1,117 @@
 # 🏝️ Edukacyjna Wyspa
 
-Magiczna wyspa nauki i zabawy dla dzieci — aplikacja PWA (działa offline,
-można ją zainstalować na telefonie/tablecie jak zwykłą apkę).
+Interaktywna aplikacja edukacyjna **PWA** dla dzieci w wieku **4–7 lat**. Działa w **100% offline**, w jednym pliku HTML — bez instalacji, bez konta, bez internetu po pierwszym wczytaniu.
 
-## 📁 Struktura plików
+> Cała aplikacja, grafiki, dźwięki i lektor są generowane lokalnie w przeglądarce. Zero zewnętrznych plików, zero śledzenia, zero reklam.
 
-| Plik | Opis |
-|------|------|
-| `index.html` | Strona główna (HTML) |
-| `styles.css` | Wszystkie style |
-| `app.js` | Cała logika aplikacji |
-| `manifest.json` | Manifest PWA (nazwa, ikony, kolory) |
-| `sw.js` | Service Worker — cache i tryb offline |
-| `icon.svg` | Ikona aplikacji |
-| `.nojekyll` | Wyłącza przetwarzanie Jekyll na GitHub Pages |
+---
 
-## 🚀 Publikacja na GitHub Pages
+## ✨ Co potrafi
 
-1. Wgraj **wszystkie pliki z tego folderu** do repozytorium (zachowaj nazwy bez zmian).
-2. Wejdź w repo → **Settings → Pages**.
-3. W sekcji *Build and deployment* wybierz **Source: Deploy from a branch**.
-4. Branch: `main`, folder: `/ (root)` → **Save**.
-5. Po chwili aplikacja będzie dostępna pod adresem:
-   `https://<twoja-nazwa>.github.io/<nazwa-repo>/`
+- **11 stref nauki:** litery, pisanie po śladzie, matematyka, gry, logika, kreatywność, kolory, kształty, zwierzęta, czas, muzyka
+- **Polski lektor** w każdym ekranie i zadaniu (`SpeechSynthesis`, głos `pl-PL`) — tłumaczy dziecku, co ma zrobić
+- **Dźwięki proceduralne** (Web Audio API) — reakcja na każde kliknięcie, fanfary, melodie stref
+- **Gry:** Memory, Kółko i krzyżyk, **Chińczyk 1–4 graczy / vs komputer**, **Wężyk**, **Kolorowa Kostka**, Labirynt, Puzzle, Simon i więcej
+- **Zadania:** liczenie, działania, **porównywanie liczb (> < =)**, **co nie pasuje**, sekwencje, dopasowania
+- **System nagród:** gwiazdki, poziomy, **monety i sklepik z ulepszeniami**, odznaki, certyfikat do druku
+- **Poziomy trudności** w wielu grach
+- **Personalizacja:** imię dziecka + wybór bohatera
+- **Panel rodzica z PIN-em:** dzienny limit czasu z blokadą, blokada wybranych stref, statystyki, przełącznik lektora, reset postępów
+- **PWA:** instalacja na ekranie domowym, pełna praca offline (Service Worker)
 
-> Ścieżki są **względne**, więc apka działa zarówno w katalogu głównym,
-> jak i w podkatalogu repozytorium — nic nie trzeba zmieniać.
+---
 
-## 🔄 Aktualizacja wersji (ważne!)
+## 🚀 Uruchomienie lokalne
 
-Service Worker buforuje pliki, więc po zmianach użytkownicy mogą widzieć starą wersję.
-Po każdej edycji **podbij numer wersji** w `sw.js`:
+Po prostu otwórz `index.html` w przeglądarce (Chrome, Edge, Safari, Firefox).
 
-```js
-const CACHE = 'edwyspa-v3';   // → zmień na 'edwyspa-v4' itd.
+Dla pełnego trybu PWA (Service Worker) najlepiej serwować przez lokalny serwer:
+
+```bash
+# Python
+python3 -m http.server 8000
+# albo Node
+npx serve .
 ```
 
-Dzięki temu stary cache zostanie usunięty i wczyta się nowa wersja.
+Następnie wejdź na `http://localhost:8000`.
 
-## 📲 Instalacja jako aplikacja
+---
 
-Na telefonie/tablecie: otwórz stronę w przeglądarce → menu → **„Dodaj do ekranu głównego"**.
-Aplikacja działa najlepiej w **orientacji poziomej (landscape)**.
+## 🌐 Publikacja na GitHub Pages
 
-## 💾 Dane
+1. Utwórz nowe repozytorium na GitHubie (np. `edukacyjna-wyspa`).
+2. Wgraj wszystkie pliki z tego folderu (zachowaj plik `.nojekyll`).
+3. W repo wejdź w **Settings → Pages**.
+4. W sekcji **Build and deployment** ustaw **Source: Deploy from a branch**, gałąź **main**, folder **/(root)**.
+5. Zapisz. Po chwili strona będzie dostępna pod:
+   `https://TWOJA-NAZWA.github.io/edukacyjna-wyspa/`
 
-Postęp dziecka (imię, gwiazdki, ukończone zadania) zapisywany jest lokalnie
-w `localStorage` przeglądarki — nic nie jest wysyłane na żadne serwery.
+> Plik `.nojekyll` wyłącza przetwarzanie Jekyll i gwarantuje, że pliki są serwowane bez zmian.
+
+### Szybki wariant z linii poleceń
+
+```bash
+git init
+git add .
+git commit -m "Edukacyjna Wyspa - PWA edukacyjna dla dzieci"
+git branch -M main
+git remote add origin https://github.com/TWOJA-NAZWA/edukacyjna-wyspa.git
+git push -u origin main
+```
+
+Potem włącz GitHub Pages w ustawieniach repo (kroki 3–5 powyżej).
+
+---
+
+## 🧱 Stos technologiczny
+
+Czysty front-end, bez frameworków i bez zależności:
+
+- HTML + CSS (Grid, Flexbox, animacje keyframes)
+- Vanilla JavaScript
+- Web Audio API — dźwięki i muzyka
+- SpeechSynthesis API — polski lektor
+- Canvas API — rysowanie, gry
+- SVG inline + emoji — grafika
+- localStorage — postępy, monety, ustawienia
+- Service Worker + Web App Manifest — PWA / offline
+- Pointer Events — obsługa dotyku i myszy
+
+---
+
+## 📁 Struktura repo
+
+```
+edukacyjna-wyspa/
+├── index.html      # szkielet strony (podpina CSS, JS, manifest, ikonę)
+├── styles.css      # style aplikacji
+├── app.js          # cała logika gier, lektor, dźwięki, postępy
+├── manifest.json   # manifest PWA
+├── sw.js           # Service Worker (cache offline)
+├── icon.svg        # ikona aplikacji
+├── README.md
+├── LICENSE
+├── .nojekyll       # serwowanie plików 1:1 na GitHub Pages
+└── .gitignore
+```
+
+> Aplikacja pozostaje w 100% offline. `sw.js` cache'uje wszystkie powyższe pliki, więc po pierwszym wczytaniu działa bez internetu i można ją zainstalować na ekranie domowym.
+
+---
+
+## 👨‍👩‍👧 Dla rodziców
+
+- Panel rodzica otwierasz **przytrzymując palcem tytuł** na mapie (~1 s).
+- Przy pierwszym wejściu ustawiasz **4-cyfrowy PIN**.
+- Możesz ustawić **dzienny limit czasu** — po jego przekroczeniu aplikacja blokuje się do następnego dnia (odblokowanie PIN-em).
+
+---
+
+## 📝 Licencja
+
+Kod udostępniony na licencji **MIT** — patrz plik [LICENSE](LICENSE). Możesz go zmienić wedle uznania.
+
+---
+
+Stworzone z myślą o najmłodszych odkrywcach. Miłej zabawy i nauki! 🌟

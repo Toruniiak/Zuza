@@ -1,4 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#0a1628"/>
-  <text x="50%" y="54%" font-size="320" text-anchor="middle" dominant-baseline="central">🏝️</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d2444"/>
+      <stop offset="1" stop-color="#1a3a6b"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3dd5f3"/>
+      <stop offset="1" stop-color="#1287b3"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#sky)"/>
+  <circle cx="380" cy="130" r="48" fill="#f4a61a"/>
+  <path d="M0 360 Q128 330 256 360 T512 360 V512 H0 Z" fill="url(#sea)"/>
+  <ellipse cx="256" cy="395" rx="120" ry="34" fill="#f1c97a"/>
+  <ellipse cx="256" cy="388" rx="92" ry="22" fill="#f7dca0"/>
+  <rect x="248" y="250" width="16" height="150" rx="8" fill="#7a5230"/>
+  <g fill="#43a047">
+    <path d="M256 250 Q190 220 150 250 Q200 232 256 262 Z"/>
+    <path d="M256 250 Q322 220 362 250 Q312 232 256 262 Z"/>
+    <path d="M256 248 Q210 200 170 196 Q224 210 256 260 Z"/>
+    <path d="M256 248 Q302 200 342 196 Q288 210 256 260 Z"/>
+    <path d="M256 246 Q256 196 256 180 Q268 214 256 260 Z"/>
+  </g>
+  <circle cx="218" cy="232" r="9" fill="#d98a2b"/>
+  <circle cx="296" cy="236" r="9" fill="#d98a2b"/>
+  <circle cx="256" cy="222" r="9" fill="#d98a2b"/>
 </svg>

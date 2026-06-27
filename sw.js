@@ -1,6 +1,4 @@
-/* Service Worker — Edukacyjna Wyspa
-   Strategia: cache-first dla zasobów aplikacji + runtime cache dla reszty (GET).
-   Aby wymusić aktualizację u użytkowników — podbij numer wersji CACHE. */
+/* Edukacyjna Wyspa - Service Worker (offline) */
 const CACHE = 'edwyspa-v3';
 const ASSETS = [
   './',
@@ -28,13 +26,12 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.open(CACHE).then(c =>
-      c.match(e.request).then(r =>
-        r || fetch(e.request).then(res => {
-          if (res && res.status === 200) c.put(e.request, res.clone());
-          return res;
-        }).catch(() => r)
-      )
+    caches.match(e.request).then(cached =>
+      cached || fetch(e.request).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
+        return res;
+      }).catch(() => cached)
     )
   );
 });

@@ -382,3 +382,60 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 /* parent panel timer */
 .timer-warn{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:7000;flex-direction:column;text-align:center;padding:30px}
 .timer-warn.show{display:flex}
+/* ---------- ROZSZERZENIE 3: gry, sklepik, PIN, blokada ---------- */
+#s-z4d,#s-z4e{background:linear-gradient(160deg,#001a00,#002d00,#001a10)}
+/* HUD monety */
+.coin-chip{background:rgba(255,210,60,.16);border-color:rgba(255,210,60,.5)}
+/* wybór liczby graczy */
+.players-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.player-btn{background:rgba(86,194,117,.15);border:2px solid var(--z4);color:#fff;border-radius:16px;padding:8px 14px;font-size:.9rem;font-weight:700;cursor:pointer}
+.player-btn.active{background:var(--z4)}
+/* wężyk */
+#snake-canvas{display:block;background:#03240a;border:3px solid var(--z4);border-radius:12px;touch-action:none;max-width:100%;height:auto}
+.snake-score{font-size:1.2rem;font-weight:800;color:var(--z4);text-align:center;margin:6px 0}
+.dpad{display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(3,56px);gap:6px;justify-content:center;margin-top:10px}
+.dpad button{font-size:1.6rem;border-radius:14px;border:2px solid var(--z4);background:rgba(86,194,117,.15);color:#fff;cursor:pointer}
+.dpad .sp{visibility:hidden}
+/* kolorowa kostka */
+.cube-target,.cube-board{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;width:150px;margin:6px auto}
+.cube-board{width:210px;gap:7px}
+.cube-cell{aspect-ratio:1;border-radius:8px;cursor:pointer;border:2px solid rgba(255,255,255,.25)}
+.cube-board .cube-cell:active{transform:scale(.92)}
+.cube-label{text-align:center;font-size:.85rem;opacity:.8;margin:4px 0}
+/* porównywanie liczb */
+.compare-row{display:flex;align-items:center;justify-content:center;gap:18px;margin:14px 0}
+.compare-side{font-size:1.4rem;text-align:center;min-width:90px}
+.compare-side .cnum{font-size:2.4rem;font-weight:900;color:var(--cyan)}
+.compare-emojis{font-size:1.3rem;max-width:110px;line-height:1.3}
+.compare-ops{display:flex;gap:14px;justify-content:center}
+.compare-op{width:74px;height:74px;border:3px solid var(--cyan);background:rgba(61,213,243,.12);color:var(--cyan);border-radius:16px;font-size:2.2rem;font-weight:900;cursor:pointer}
+.compare-op:active{transform:scale(.9)} .compare-op.correct{background:var(--green);border-color:var(--green);color:#fff} .compare-op.wrong{background:var(--red);border-color:var(--red);color:#fff}
+/* sklepik */
+#s-shop{background:linear-gradient(160deg,#1a1400,#2d2400,#0d1020);overflow-y:auto}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;max-width:520px;width:100%;padding:8px}
+.shop-item{background:rgba(255,255,255,.08);border:2px solid rgba(255,210,60,.4);border-radius:16px;padding:14px 10px;text-align:center}
+.shop-item.owned{border-color:var(--green)}
+.shop-item .si-emoji{font-size:2.4rem}
+.shop-item .si-name{font-size:.85rem;font-weight:700;margin:6px 0}
+.shop-item .si-buy{background:var(--gold);color:#000;border:none;border-radius:14px;padding:8px 12px;font-weight:800;cursor:pointer;font-size:.85rem;width:100%}
+.shop-item .si-buy:disabled{opacity:.5}
+/* PIN / blokada rodzicielska */
+.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:8000;padding:20px}
+.pin-overlay.show{display:flex}
+.pin-box{background:#13203a;border:2px solid var(--gold);border-radius:20px;padding:24px;max-width:340px;width:100%;text-align:center}
+.pin-display{font-size:2.4rem;letter-spacing:10px;min-height:44px;margin:12px 0;color:var(--gold)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.pin-pad button{font-size:1.5rem;font-weight:800;padding:14px;border-radius:14px;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.pin-pad button:active{background:rgba(255,255,255,.2)}
+.pin-msg{font-size:.9rem;opacity:.85;margin-top:8px;min-height:20px}
+.lock-overlay{position:fixed;inset:0;background:linear-gradient(160deg,#1a0a0a,#2d0f0f);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:8500;padding:30px;text-align:center}
+.lock-overlay.show{display:flex}
+/* przełącznik ustawień w panelu rodzica */
+.set-toggle{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:.92rem}
+.set-toggle button{padding:6px 14px;border-radius:12px;border:none;font-weight:700;cursor:pointer;color:#fff}
+.set-on{background:var(--green)} .set-off{background:#555}
+/* motywy mapy ze sklepiku */
+body.theme-gold #s-map{background:linear-gradient(160deg,#3a2c00,#5c4600,#1a1400)!important}
+body.theme-gold .map-title{color:#ffd23d!important}
+body.theme-ocean #s-map{background:linear-gradient(160deg,#012a3a,#01405c,#001018)!important}
+body.theme-ocean .map-title{color:#3dd5f3!important}

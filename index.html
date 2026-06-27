@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#0a1628">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
 <title>Edukacyjna Wyspa</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -36,6 +35,7 @@
   <div id="map-greeting" style="z-index:2;font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:4px;min-height:20px"></div>
   <div class="hud">
     <div class="hud-chip">⭐ <span id="hud-stars">0</span></div>
+    <div class="hud-chip coin-chip">🪙 <span id="hud-coins">0</span></div>
     <div class="hud-chip">🏆 Poziom <span id="hud-level">1</span></div>
     <div class="hud-chip"><div class="level-bar-wrap"><div class="level-bar" id="hud-levelbar"></div></div></div>
   </div>
@@ -47,6 +47,7 @@
   <div class="portal-grid" id="portal-grid"></div>
   <div class="map-bottom-row">
     <button class="map-mini-btn" onclick="goToScreen('s-ach');renderAchievements()">🏅 Osiągnięcia</button>
+    <button class="map-mini-btn" onclick="goToScreen('s-shop');renderShop()">🛒 Sklepik</button>
     <button class="map-mini-btn" onclick="goToScreen('s-board');initBoard()">🎨 Tablica</button>
     <button class="map-mini-btn" onclick="goToScreen('s-cert');renderCertificate()">📜 Certyfikat</button>
     <button class="map-mini-btn" id="install-btn" onclick="installPWA()" style="display:none">📲 Zainstaluj</button>
@@ -59,7 +60,7 @@
   <div class="game-screen" style="justify-content:center">
     <div class="game-title" style="color:var(--gold)">👋 Witaj na Wyspie!</div>
     <div class="game-subtitle">Jak masz na imię?</div>
-    <input id="name-input" maxlength="12" placeholder="Twoje imię"
+    <input id="name-input" maxlength="12" placeholder="Twoje imię" onfocus="narrateNameInput()"
       style="font-size:1.2rem;padding:12px 18px;border-radius:16px;border:3px solid var(--gold);background:rgba(255,255,255,.1);color:#fff;text-align:center;width:min(280px,80vw);margin-bottom:6px">
     <div class="game-subtitle" style="margin-top:14px">Wybierz swojego bohatera:</div>
     <div id="avatar-picker" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:340px;margin-bottom:18px"></div>
@@ -209,6 +210,7 @@
   <button class="tut-btn" onclick="playTutorial('z4','z4c')">❓</button>
   <div class="game-screen">
     <div class="game-title" style="color:var(--z4)">🎲 Edukacyjny Chińczyk</div>
+    <div class="players-row" id="chin-players"></div>
     <div class="chinczyk-info" id="chin-info">💙 Ty | 💚 Creeper</div>
     <div class="chinczyk-track" id="chin-track"></div>
     <div class="dice-display" id="dice-disp">🎲</div>
@@ -496,10 +498,75 @@
   <div class="game-screen"><div id="cert-box"></div>
     <button class="big-btn" onclick="window.print()" style="margin-top:16px">🖨️ Wydrukuj</button></div></div>
 
+<!-- ========== Z4D: WĘŻYK ========== -->
+<div class="screen" id="s-z4d"><button class="back-btn" onclick="goBack()">← Gry</button><button class="tut-btn" onclick="playTutorial('z4','z4d')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z4)">🐍 Wężyk</div>
+    <div class="diff-row" id="snake-diff"></div>
+    <div class="snake-score" id="snake-score">Jabłka: 0</div>
+    <canvas id="snake-canvas" width="300" height="300"></canvas>
+    <div class="dpad">
+      <button class="sp"></button><button onclick="snakeDir(0,-1)">⬆️</button><button class="sp"></button>
+      <button onclick="snakeDir(-1,0)">⬅️</button><button onclick="snakeTogglePause()" id="snake-pause">⏸️</button><button onclick="snakeDir(1,0)">➡️</button>
+      <button class="sp"></button><button onclick="snakeDir(0,1)">⬇️</button><button class="sp"></button>
+    </div>
+    <button class="big-btn green" onclick="initSnake()" style="margin-top:10px">🔄 Nowa gra</button></div></div>
+
+<!-- ========== Z4E: KOLOROWA KOSTKA ========== -->
+<div class="screen" id="s-z4e"><button class="back-btn" onclick="goBack()">← Gry</button><button class="tut-btn" onclick="playTutorial('z4','z4e')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z4)">🧊 Kolorowa Kostka</div>
+    <div class="diff-row" id="cube-diff"></div>
+    <div class="cube-label">🎯 Ułóż tak jak na wzorze:</div>
+    <div class="cube-target" id="cube-target"></div>
+    <div class="cube-label">👇 Dotykaj pola, aby zmienić kolor:</div>
+    <div class="cube-board" id="cube-board"></div>
+    <div class="palette" id="cube-palette" style="margin-top:8px"></div>
+    <button class="big-btn green" onclick="initCube()" style="margin-top:10px">🔄 Nowa kostka</button></div></div>
+
+<!-- ========== Z3D: PORÓWNYWANIE LICZB ========== -->
+<div class="screen" id="s-z3d"><button class="back-btn" onclick="goBack()">← Matematyka</button><button class="tut-btn" onclick="playTutorial('z3','z3d')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--cyan)">⚖️ Co jest większe?</div>
+    <div class="game-subtitle">Wybierz znak: większe, mniejsze czy równe?</div>
+    <div class="compare-row" id="compare-row"></div>
+    <div class="compare-ops" id="compare-ops"></div>
+    <button class="big-btn cyan" onclick="nextCompare()" style="margin-top:14px">Następne →</button></div></div>
+
+<!-- ========== Z5E: CO NIE PASUJE ========== -->
+<div class="screen" id="s-z5e"><button class="back-btn" onclick="goBack()">← Logika</button><button class="tut-btn" onclick="playTutorial('z5','z5e')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z5)">🤔 Co tu nie pasuje?</div>
+    <div class="game-subtitle" id="odd-sub">Dotknij obrazek, który nie pasuje do reszty!</div>
+    <div class="shape-opts" id="odd-grid" style="flex-wrap:wrap;max-width:360px"></div>
+    <button class="big-btn purple" onclick="nextOddOne()" style="margin-top:14px">Następne →</button></div></div>
+
+<!-- ========== SKLEPIK ========== -->
+<div class="screen" id="s-shop"><button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--gold)">🛒 Sklepik</div>
+    <div class="game-subtitle" id="shop-coins">Masz 🪙 0 monet</div>
+    <div class="shop-grid" id="shop-grid"></div></div></div>
+
+<!-- ========== PIN RODZICA ========== -->
+<div class="pin-overlay" id="pin-overlay">
+  <div class="pin-box">
+    <h2 id="pin-title" style="font-size:1.2rem">🔒 Panel rodzica</h2>
+    <div class="pin-msg" id="pin-msg">Podaj kod PIN</div>
+    <div class="pin-display" id="pin-display"></div>
+    <div class="pin-pad" id="pin-pad"></div>
+    <button class="big-btn ghost" onclick="closePin()" style="margin-top:12px;width:100%">Anuluj</button>
+  </div>
+</div>
+
+<!-- ========== BLOKADA CZASOWA ========== -->
+<div class="lock-overlay" id="lock-overlay">
+  <div style="font-size:4.5rem">🌙</div>
+  <div style="font-size:1.6rem;font-weight:900;color:var(--gold);margin:14px 0">Koniec grania na dziś!</div>
+  <div style="opacity:.85;max-width:320px">Dzienny czas zabawy minął. Czas odpocząć! 😴<br>Rodzic może odblokować kodem PIN.</div>
+  <button class="big-btn" style="margin-top:20px" onclick="unlockWithPin()">🔓 Odblokuj (rodzic)</button>
+</div>
+
 <!-- ========== OVERLAYS ========== -->
 <div id="hint-layer"></div>
 <div class="hint-toast" id="hint-toast"></div>
 <div class="mascot-pop" id="mascot-pop">👽</div>
-<script src="app.js"></script>
+
+<script src="app.js" defer></script>
 </body>
 </html>
