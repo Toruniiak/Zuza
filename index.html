@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Edukacyjna Wyspa</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- ========== LOADING ========== -->
+<div class="screen active" id="s-loading" onclick="startApp()">
+  <div class="stitch-load" id="load-emoji">🌺</div>
+  <div class="load-title">🏝️ EDUKACYJNA<br>WYSPA 🏝️</div>
+  <div class="load-sub">Magiczna wyspa nauki i zabawy</div>
+  <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+  <div class="tap-start" id="tap-start">👆 Dotknij, aby zacząć!</div>
+</div>
+
+<!-- ========== MAP ========== -->
+<div class="screen" id="s-map">
+  <div class="stars-bg" id="stars"></div>
+  <svg class="map-island-bg" width="380" height="150" viewBox="0 0 380 150">
+    <ellipse cx="190" cy="120" rx="170" ry="36" fill="#3d8a25"/>
+    <ellipse cx="190" cy="115" rx="140" ry="28" fill="#4caf50"/>
+    <circle cx="90" cy="90" r="20" fill="#3d8a25"/><rect x="87" y="100" width="6" height="20" fill="#5d3a1a"/>
+    <circle cx="290" cy="85" r="18" fill="#3d8a25"/><rect x="287" y="98" width="6" height="18" fill="#5d3a1a"/>
+  </svg>
+  <div class="map-title" id="map-title" onpointerdown="parentLongPressStart()" onpointerup="parentLongPressEnd()" onpointerleave="parentLongPressEnd()">🏝️ EDUKACYJNA WYSPA</div>
+  <div id="map-greeting" style="z-index:2;font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:4px;min-height:20px"></div>
+  <div class="hud">
+    <div class="hud-chip">⭐ <span id="hud-stars">0</span></div>
+    <div class="hud-chip">🏆 Poziom <span id="hud-level">1</span></div>
+    <div class="hud-chip"><div class="level-bar-wrap"><div class="level-bar" id="hud-levelbar"></div></div></div>
+  </div>
+  <div class="music-panel">
+    <button id="music-toggle" onclick="toggleMusic()">🎵</button>
+    <input type="range" class="vol-slider" id="vol-slider" min="0" max="100" value="55" oninput="setVolume(this.value)">
+  </div>
+  <div class="daily-banner" id="daily-banner" onclick="startDaily()">🎯 <span id="daily-text">Wyzwanie dnia</span></div>
+  <div class="portal-grid" id="portal-grid"></div>
+  <div class="map-bottom-row">
+    <button class="map-mini-btn" onclick="goToScreen('s-ach');renderAchievements()">🏅 Osiągnięcia</button>
+    <button class="map-mini-btn" onclick="goToScreen('s-board');initBoard()">🎨 Tablica</button>
+    <button class="map-mini-btn" onclick="goToScreen('s-cert');renderCertificate()">📜 Certyfikat</button>
+    <button class="map-mini-btn" id="install-btn" onclick="installPWA()" style="display:none">📲 Zainstaluj</button>
+  </div>
+  <div id="visit-counter" style="z-index:2;margin-top:18px;font-size:.72rem;opacity:.55;text-align:center">👣 Odwiedziny: 0</div>
+</div>
+
+<!-- ========== ONBOARDING (imię + awatar) ========== -->
+<div class="screen" id="s-onboard" style="background:linear-gradient(160deg,#0a1628,#1a1040,#0d2444)">
+  <div class="game-screen" style="justify-content:center">
+    <div class="game-title" style="color:var(--gold)">👋 Witaj na Wyspie!</div>
+    <div class="game-subtitle">Jak masz na imię?</div>
+    <input id="name-input" maxlength="12" placeholder="Twoje imię"
+      style="font-size:1.2rem;padding:12px 18px;border-radius:16px;border:3px solid var(--gold);background:rgba(255,255,255,.1);color:#fff;text-align:center;width:min(280px,80vw);margin-bottom:6px">
+    <div class="game-subtitle" style="margin-top:14px">Wybierz swojego bohatera:</div>
+    <div id="avatar-picker" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:340px;margin-bottom:18px"></div>
+    <button class="big-btn" onclick="finishOnboard()">Zaczynamy! 🚀</button>
+  </div>
+</div>
+
+<!-- ========== ZONE 1: LITERY ========== -->
+<div class="screen" id="s-z1">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z1)">📖 Litery i Czytanie</div><div id="z1-cards"></div></div>
+</div>
+<div class="screen" id="s-z1a">
+  <button class="back-btn" onclick="goBack()">← Litery</button>
+  <button class="tut-btn" onclick="playTutorial('z1','z1a')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z1)">🔤 Klawiatura Sticha</div>
+    <div class="game-subtitle">Kliknij literę, żeby ją usłyszeć! 👂</div>
+    <div class="letter-grid" id="letter-grid"></div>
+  </div>
+</div>
+<div class="screen" id="s-z1b">
+  <button class="back-btn" onclick="goBack()">← Litery</button>
+  <button class="tut-btn" onclick="playTutorial('z1','z1b')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z1)">🧩 Układanie Słów</div>
+    <div id="word-emoji" class="word-emoji"></div>
+    <div id="word-hint" class="word-hint"></div>
+    <div class="slot-row" id="slot-row"></div>
+    <div class="letter-options" id="letter-options"></div>
+    <button class="big-btn" onclick="nextWord()" style="margin-top:6px">Następne słowo →</button>
+  </div>
+</div>
+<div class="screen" id="s-z1c">
+  <button class="back-btn" onclick="goBack()">← Litery</button>
+  <button class="tut-btn" onclick="playTutorial('z1','z1c')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z1)">🎵 Sylabowe Puzzle</div>
+    <div class="game-subtitle" id="syl-word-name"></div>
+    <div id="word-progress" class="word-progress"></div>
+    <div class="syllable-row" id="syl-buttons"></div>
+    <button class="big-btn" onclick="nextSylWord()" style="margin-top:8px">Następne słowo →</button>
+  </div>
+</div>
+<div class="screen" id="s-z1d">
+  <button class="back-btn" onclick="goBack()">← Litery</button>
+  <button class="tut-btn" onclick="playTutorial('z1','z1d')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z1)">🖼️ Dopasuj słowo</div>
+    <div class="game-subtitle">Który napis pasuje do obrazka?</div>
+    <div class="match-pic" id="match-pic"></div>
+    <div class="match-opts" id="match-opts"></div>
+    <button class="big-btn" onclick="nextMatch()" style="margin-top:12px">Następny →</button>
+  </div>
+</div>
+
+<!-- ========== ZONE 2: PISANIE ========== -->
+<div class="screen" id="s-z2">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <button class="tut-btn" onclick="playTutorial('z2','z2')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--pink)">✏️ Pisanie z Wiolą</div>
+    <div class="diff-row" id="z2-diff"></div>
+    <div class="char-picker" id="char-picker"></div>
+    <div class="canvas-wrap"><canvas id="draw-canvas" width="320" height="220"></canvas></div>
+    <div class="draw-controls">
+      <button class="big-btn pink" onclick="clearDrawing()">🗑️ Wymaż</button>
+      <button class="big-btn green" onclick="saveDrawing()">💾 Zapisz</button>
+      <button class="big-btn" onclick="checkCoverage()">✅ Sprawdź!</button>
+    </div>
+    <div class="coverage-bar-wrap"><div class="coverage-bar" id="cov-bar"></div></div>
+    <div class="coverage-text" id="cov-text">Rysuj palcem po kropkach!</div>
+    <div class="gallery" id="draw-gallery"></div>
+  </div>
+</div>
+
+<!-- ========== ZONE 3: MATEMATYKA ========== -->
+<div class="screen" id="s-z3">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z3)">💎 Matematyka</div><div id="z3-cards"></div></div>
+</div>
+<div class="screen" id="s-z3a">
+  <button class="back-btn" onclick="goBack()">← Matematyka</button>
+  <button class="tut-btn" onclick="playTutorial('z3','z3a')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--cyan)">💎 Liczenie Diamentów</div>
+    <div class="game-subtitle">Dotykaj diamenty i licz ze Stichem!</div>
+    <div class="count-display" id="count-display">0</div>
+    <div class="diamond-grid" id="diamond-grid"></div>
+    <div style="margin:8px 0;font-size:.9rem;opacity:.8">Ile ich jest razem?</div>
+    <div class="ans-row" id="diamond-answers"></div>
+    <button class="big-btn cyan" onclick="nextDiamond()" style="margin-top:14px">Nowe zadanie →</button>
+  </div>
+</div>
+<div class="screen" id="s-z3b">
+  <button class="back-btn" onclick="goBack()">← Matematyka</button>
+  <button class="tut-btn" onclick="playTutorial('z3','z3b')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--cyan)">🧮 Działania</div>
+    <div class="diff-row" id="z3b-ops"></div>
+    <div class="math-emoji-row" id="math-emoji"></div>
+    <div class="math-eq" id="math-eq"></div>
+    <div class="ans-row" id="math-answers"></div>
+    <button class="big-btn cyan" onclick="nextMath()" style="margin-top:14px">Nowe zadanie →</button>
+  </div>
+</div>
+<div class="screen" id="s-z3c">
+  <button class="back-btn" onclick="goBack()">← Matematyka</button>
+  <button class="tut-btn" onclick="playTutorial('z3','z3c')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--cyan)">🎈 Balony Matematyczne</div>
+    <div class="balloon-target" id="balloon-target"></div>
+    <div class="balloon-field" id="balloon-field"></div>
+    <div class="mem-score" id="balloon-score" style="margin-top:10px">Trafienia: 0 / 5</div>
+  </div>
+</div>
+
+<!-- ========== ZONE 4: GRY ========== -->
+<div class="screen" id="s-z4">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z4)">🎮 Gry i Zabawy</div><div id="z4-cards"></div></div>
+</div>
+<div class="screen" id="s-z4a">
+  <button class="back-btn" onclick="goBack()">← Gry</button>
+  <button class="tut-btn" onclick="playTutorial('z4','z4a')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z4)">🃏 Memory</div>
+    <div class="diff-row" id="mem-diff"></div>
+    <div class="mem-score" id="mem-score">Pary: 0</div>
+    <div class="memory-grid" id="memory-grid"></div>
+    <button class="big-btn green" onclick="initMemory()" style="margin-top:14px">🔄 Nowa gra</button>
+  </div>
+</div>
+<div class="screen" id="s-z4b">
+  <button class="back-btn" onclick="goBack()">← Gry</button>
+  <button class="tut-btn" onclick="playTutorial('z4','z4b')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z4)">⭕ Kółko i Krzyżyk</div>
+    <div class="game-subtitle">Ty = 💙 Stich (X) | Komputer = 💖 Wojan (O)</div>
+    <div class="ttt-status" id="ttt-status">Twoja kolej!</div>
+    <div class="ttt-grid" id="ttt-grid"></div>
+    <button class="big-btn green" onclick="initTTT()" style="margin-top:14px">🔄 Nowa gra</button>
+  </div>
+</div>
+<div class="screen" id="s-z4c">
+  <button class="back-btn" onclick="goBack()">← Gry</button>
+  <button class="tut-btn" onclick="playTutorial('z4','z4c')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z4)">🎲 Edukacyjny Chińczyk</div>
+    <div class="chinczyk-info" id="chin-info">💙 Ty | 💚 Creeper</div>
+    <div class="chinczyk-track" id="chin-track"></div>
+    <div class="dice-display" id="dice-disp">🎲</div>
+    <div id="quiz-area" style="width:100%"></div>
+    <button class="big-btn green" id="chin-roll-btn" onclick="rollDice()">🎲 Rzuć kostką!</button>
+    <button class="big-btn ghost" onclick="initChinczyk()" style="margin-top:8px">🔄 Nowa gra</button>
+  </div>
+</div>
+
+<!-- ========== ZONE 5: LOGIKA ========== -->
+<div class="screen" id="s-z5">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z5)">🧠 Logika i Obserwacja</div><div id="z5-cards"></div></div>
+</div>
+<div class="screen" id="s-z5a">
+  <button class="back-btn" onclick="goBack()">← Logika</button>
+  <button class="tut-btn" onclick="playTutorial('z5','z5a')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z5)">🔢 Co dalej?</div>
+    <div class="game-subtitle">Dokończ wzór — co pasuje w miejsce ❓</div>
+    <div class="seq-row" id="seq-row"></div>
+    <div class="seq-opts" id="seq-opts"></div>
+    <button class="big-btn purple" onclick="nextSequence()" style="margin-top:14px">Następny →</button>
+  </div>
+</div>
+<div class="screen" id="s-z5b">
+  <button class="back-btn" onclick="goBack()">← Logika</button>
+  <button class="tut-btn" onclick="playTutorial('z5','z5b')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z5)">🔍 Znajdź różnicę</div>
+    <div class="game-subtitle" id="diff-sub">Dotknij to, co jest inne!</div>
+    <div class="seq-row"><div class="seq-item" style="border:none;font-size:.9rem;opacity:.7">Znalezione: <span id="diff-found">0</span>/<span id="diff-total">0</span></div></div>
+    <div class="diff-scene"><div class="diff-grid" id="diff-grid"></div></div>
+    <button class="big-btn purple" onclick="nextDifference()" style="margin-top:14px">Następny →</button>
+  </div>
+</div>
+<div class="screen" id="s-z5c">
+  <button class="back-btn" onclick="goBack()">← Logika</button>
+  <button class="tut-btn" onclick="playTutorial('z5','z5c')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z5)">🧩 Puzzle</div>
+    <div class="game-subtitle">Przeciągnij części na właściwe miejsca!</div>
+    <div class="puzzle-board" id="puzzle-board"></div>
+    <div class="puz-tray" id="puzzle-tray"></div>
+    <button class="big-btn purple" onclick="initPuzzle()" style="margin-top:14px">Nowy obrazek →</button>
+  </div>
+</div>
+<div class="screen" id="s-z5d">
+  <button class="back-btn" onclick="goBack()">← Logika</button>
+  <button class="tut-btn" onclick="playTutorial('z5','z5d')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z5)">🌀 Labirynt</div>
+    <div class="game-subtitle">Przesuń palcem 💙 do 🏆!</div>
+    <div id="maze-wrap" class="maze-wrap"></div>
+    <button class="big-btn purple" onclick="initMaze()" style="margin-top:14px">Nowy labirynt →</button>
+  </div>
+</div>
+
+<!-- ========== ZONE 6: UBIERANKI / OPIEKA ========== -->
+<div class="screen" id="s-z6">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z6)">👗 Ubieranki i Opieka</div><div id="z6-cards"></div></div>
+</div>
+<div class="screen" id="s-z6a">
+  <button class="back-btn" onclick="goBack()">← Ubieranki</button>
+  <button class="tut-btn" onclick="playTutorial('z6','z6a')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z6)">👗 Ubieranki</div>
+    <div class="char-toggle" id="dress-char-toggle"></div>
+    <div class="theme-row" id="dress-themes"></div>
+    <div class="dress-stage">
+      <div class="dress-char" id="dress-base">👧</div>
+      <div class="dress-layer dl-hat" id="dl-hat"></div>
+      <div class="dress-layer dl-acc" id="dl-acc"></div>
+      <div class="dress-layer dl-body" id="dl-body"></div>
+      <div class="dress-layer dl-feet" id="dl-feet"></div>
+    </div>
+    <div class="wardrobe" id="wardrobe"></div>
+    <button class="big-btn" onclick="celebrateDress()" style="margin-top:12px;background:var(--z6)">✨ Gotowe!</button>
+  </div>
+</div>
+<div class="screen" id="s-z6b">
+  <button class="back-btn" onclick="goBack()">← Opieka</button>
+  <button class="tut-btn" onclick="playTutorial('z6','z6b')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z6)">🐾 Opieka nad zwierzakiem</div>
+    <div class="char-toggle" id="pet-toggle"></div>
+    <div class="pet-stage" id="pet-stage">🐶</div>
+    <div class="meters" id="pet-meters"></div>
+    <div class="care-actions">
+      <button class="care-btn" onclick="petAction('feed')">🍖</button>
+      <button class="care-btn" onclick="petAction('wash')">🧼</button>
+      <button class="care-btn" onclick="petAction('play')">🎾</button>
+      <button class="care-btn" onclick="petAction('sleep')">😴</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="s-z6c">
+  <button class="back-btn" onclick="goBack()">← Gotowanie</button>
+  <button class="tut-btn" onclick="playTutorial('z6','z6c')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z6)">🍳 Gotowanie</div>
+    <div class="game-subtitle" id="cook-goal">Zrób pyszną kanapkę!</div>
+    <div class="plate" id="cook-plate"></div>
+    <div class="ingredient-tray" id="cook-tray"></div>
+    <button class="big-btn" onclick="serveDish()" style="margin-top:10px;background:var(--z6)">🍽️ Podaj!</button>
+  </div>
+</div>
+<div class="screen" id="s-z6d">
+  <button class="back-btn" onclick="goBack()">← Salon</button>
+  <button class="tut-btn" onclick="playTutorial('z6','z6d')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z6)">💅 Salon piękności</div>
+    <div class="game-subtitle">Wybierz kolor i pomaluj paznokcie!</div>
+    <div class="nails" id="nails"></div>
+    <div class="palette" id="nail-palette"></div>
+    <button class="big-btn" onclick="celebrate('Pięknie! 💅','Gotowy manicure!',3,'z6d')" style="margin-top:14px;background:var(--z6)">✨ Gotowe!</button>
+  </div>
+</div>
+
+<!-- ========== EXTRA GAMES ========== -->
+<div class="screen" id="s-cbn">
+  <button class="back-btn" onclick="goBack()">← Logika</button>
+  <button class="tut-btn" onclick="playTutorial('z5','cbn')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z5)">🎨 Maluj po numerach</div>
+    <div class="game-subtitle">Wybierz kolor i dotknij pól z tą cyfrą!</div>
+    <div class="cbn-grid" id="cbn-grid"></div>
+    <div class="cbn-palette" id="cbn-palette"></div>
+    <button class="big-btn purple" onclick="initCBN()" style="margin-top:12px">Nowy obrazek →</button>
+  </div>
+</div>
+<div class="screen" id="s-shadow">
+  <button class="back-btn" onclick="goBack()">← Logika</button>
+  <button class="tut-btn" onclick="playTutorial('z5','shadow')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z5)">🌚 Znajdź cień</div>
+    <div class="game-subtitle">Który obrazek pasuje do cienia?</div>
+    <div class="shadow-target" id="shadow-target"></div>
+    <div class="shadow-opts" id="shadow-opts"></div>
+    <button class="big-btn purple" onclick="nextShadow()" style="margin-top:14px">Następny →</button>
+  </div>
+</div>
+<div class="screen" id="s-sort">
+  <button class="back-btn" onclick="goBack()">← Logika</button>
+  <button class="tut-btn" onclick="playTutorial('z5','sort')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z5)">📦 Sortowanie</div>
+    <div class="game-subtitle" id="sort-goal">Przeciągnij do właściwego pojemnika!</div>
+    <div class="sort-items" id="sort-items"></div>
+    <div class="bins" id="sort-bins"></div>
+  </div>
+</div>
+<div class="screen" id="s-beads">
+  <button class="back-btn" onclick="goBack()">← Ubieranki</button>
+  <button class="tut-btn" onclick="playTutorial('z6','beads')">❓</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--z6)">📿 Koraliki</div>
+    <div class="game-subtitle">Twórz własny wzór z koralików!</div>
+    <div class="bead-string" id="bead-string"></div>
+    <div class="bead-palette" id="bead-palette"></div>
+    <div class="care-actions" style="margin-top:10px">
+      <button class="big-btn ghost" onclick="clearBeads()">🗑️ Wyczyść</button>
+      <button class="big-btn" onclick="celebrate('Cudny naszyjnik! 📿','Piękny wzór!',3,'beads')" style="background:var(--z6)">✨ Gotowe!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ACHIEVEMENTS ========== -->
+<div class="screen" id="s-ach">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="game-screen">
+    <div class="game-title" style="color:var(--gold)">🏅 Moje Osiągnięcia</div>
+    <div class="game-subtitle" id="ach-summary"></div>
+    <div class="ach-grid" id="ach-grid"></div>
+  </div>
+</div>
+
+<!-- ========== PARENT PANEL ========== -->
+<div class="modal-bg" id="parent-modal">
+  <div class="modal">
+    <h2>👨‍👩‍👧 Panel Rodzica</h2>
+    <div id="parent-stats"></div>
+    <div style="margin-top:14px;font-size:.9rem;font-weight:700">🎵 Dźwięk</div>
+    <div class="stat-row"><span>Muzyka</span><button class="m-btn" style="width:auto;margin:0;padding:6px 14px;background:var(--gold)" id="pp-music" onclick="toggleMusic()">—</button></div>
+    <button class="m-btn" style="background:var(--red);color:#fff" onclick="resetProgress()">🗑️ Resetuj postęp dziecka</button>
+    <button class="m-btn" style="background:var(--gold)" onclick="closeParent()">✖️ Zamknij</button>
+  </div>
+</div>
+
+<!-- ========== ZONE 7: KOLORY ========== -->
+<div class="screen" id="s-z7"><button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z7)">🎨 Kolory</div><div id="z7-cards"></div></div></div>
+<div class="screen" id="s-z7a"><button class="back-btn" onclick="goBack()">← Kolory</button><button class="tut-btn" onclick="playTutorial('z7','z7a')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z7)">👆 Kliknij kolor</div>
+    <div class="game-subtitle" id="color-prompt"></div>
+    <div class="color-grid" id="color-grid"></div></div></div>
+<div class="screen" id="s-z7b"><button class="back-btn" onclick="goBack()">← Kolory</button><button class="tut-btn" onclick="playTutorial('z7','z7b')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z7)">📦 Sortuj kolory</div>
+    <div class="game-subtitle" id="csort-goal">Przeciągnij do właściwego koszyka!</div>
+    <div class="sort-items" id="csort-items"></div><div class="bins" id="csort-bins"></div></div></div>
+<div class="screen" id="s-z7c"><button class="back-btn" onclick="goBack()">← Kolory</button><button class="tut-btn" onclick="playTutorial('z7','z7c')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z7)">🌈 Mieszanie kolorów</div>
+    <div class="game-subtitle">Połącz dwa kolory i zobacz, co powstanie!</div>
+    <div class="mix-row" id="mix-row"></div>
+    <div class="mix-result" id="mix-result">❓</div>
+    <div class="mix-goal" id="mix-goal"></div></div></div>
+
+<!-- ========== ZONE 8: KSZTAŁTY ========== -->
+<div class="screen" id="s-z8"><button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z8)">🔷 Kształty</div><div id="z8-cards"></div></div></div>
+<div class="screen" id="s-z8a"><button class="back-btn" onclick="goBack()">← Kształty</button><button class="tut-btn" onclick="playTutorial('z8','z8a')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z8)">🔍 Poznaj kształty</div>
+    <div class="game-subtitle" id="shape-prompt"></div>
+    <div class="shape-grid" id="shape-grid"></div></div></div>
+<div class="screen" id="s-z8b"><button class="back-btn" onclick="goBack()">← Kształty</button><button class="tut-btn" onclick="playTutorial('z8','z8b')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z8)">🧩 Dopasuj kształt</div>
+    <div class="game-subtitle">Który przedmiot ma taki kształt?</div>
+    <div class="shape-big" id="shape-big"></div>
+    <div class="shape-opts" id="shapematch-opts"></div>
+    <button class="big-btn" onclick="nextShapeMatch()" style="margin-top:14px;background:var(--z8)">Następny →</button></div></div>
+
+<!-- ========== ZONE 9: ZWIERZĘTA ========== -->
+<div class="screen" id="s-z9"><button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z9)">🦁 Zwierzęta</div><div id="z9-cards"></div></div></div>
+<div class="screen" id="s-z9a"><button class="back-btn" onclick="goBack()">← Zwierzęta</button><button class="tut-btn" onclick="playTutorial('z9','z9a')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z9)">🔊 Głosy zwierząt</div>
+    <div class="game-subtitle">Dotknij zwierzę i posłuchaj!</div>
+    <div class="animal-grid" id="animal-grid"></div></div></div>
+<div class="screen" id="s-z9b"><button class="back-btn" onclick="goBack()">← Zwierzęta</button><button class="tut-btn" onclick="playTutorial('z9','z9b')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z9)">🏠 Gdzie mieszka?</div>
+    <div class="game-subtitle" id="home-q"></div>
+    <div class="shape-big" id="home-animal"></div>
+    <div class="shape-opts" id="home-opts"></div>
+    <button class="big-btn" onclick="nextAnimalHome()" style="margin-top:14px;background:var(--z9)">Następne →</button></div></div>
+<div class="screen" id="s-z9c"><button class="back-btn" onclick="goBack()">← Zwierzęta</button><button class="tut-btn" onclick="playTutorial('z9','z9c')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z9)">🍽️ Czym się żywi?</div>
+    <div class="game-subtitle" id="food-q"></div>
+    <div class="shape-big" id="food-animal"></div>
+    <div class="shape-opts" id="food-opts"></div>
+    <button class="big-btn" onclick="nextAnimalFood()" style="margin-top:14px;background:var(--z9)">Następne →</button></div></div>
+
+<!-- ========== ZONE 10: CZAS ========== -->
+<div class="screen" id="s-z10"><button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z10)">🕐 Czas</div><div id="z10-cards"></div></div></div>
+<div class="screen" id="s-z10a"><button class="back-btn" onclick="goBack()">← Czas</button><button class="tut-btn" onclick="playTutorial('z10','z10a')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z10)">🌅 Pory dnia</div>
+    <div class="game-subtitle" id="tod-q"></div>
+    <div class="shape-big" id="tod-activity"></div>
+    <div class="shape-opts" id="tod-opts"></div>
+    <button class="big-btn" onclick="nextTimeOfDay()" style="margin-top:14px;background:var(--z10)">Następne →</button></div></div>
+<div class="screen" id="s-z10b"><button class="back-btn" onclick="goBack()">← Czas</button><button class="tut-btn" onclick="playTutorial('z10','z10b')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z10)">🕐 Która godzina?</div>
+    <div class="game-subtitle">Popatrz na zegar i wybierz godzinę!</div>
+    <svg id="clock-svg" width="200" height="200" viewBox="0 0 200 200"></svg>
+    <div class="ans-row" id="clock-opts"></div>
+    <button class="big-btn" onclick="nextClock()" style="margin-top:14px;background:var(--z10)">Następny →</button></div></div>
+
+<!-- ========== ZONE 11: MUZYKA ========== -->
+<div class="screen" id="s-z11"><button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="hub"><div class="hub-title" style="color:var(--z11)">🎹 Muzyka</div><div id="z11-cards"></div></div></div>
+<div class="screen" id="s-z11a"><button class="back-btn" onclick="goBack()">← Muzyka</button><button class="tut-btn" onclick="playTutorial('z11','z11a')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z11)">🎹 Pianino</div>
+    <div class="game-subtitle">Dotykaj klawisze i graj melodie!</div>
+    <div class="piano" id="piano"></div></div></div>
+<div class="screen" id="s-z11b"><button class="back-btn" onclick="goBack()">← Muzyka</button><button class="tut-btn" onclick="playTutorial('z11','z11b')">❓</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--z11)">🎵 Zapamiętaj melodię</div>
+    <div class="game-subtitle" id="simon-status">Patrz i słuchaj, potem powtórz!</div>
+    <div class="simon-grid" id="simon-grid"></div>
+    <button class="big-btn" id="simon-start" onclick="simonStart()" style="margin-top:16px;background:var(--z11)">▶️ Start</button></div></div>
+
+<!-- ========== TABLICA RYSUNKOWA ========== -->
+<div class="screen" id="s-board"><button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="game-screen"><div class="game-title" style="color:var(--cyan)">🎨 Tablica rysunkowa</div>
+    <div class="canvas-wrap" style="border-color:var(--cyan)"><canvas id="board-canvas" width="340" height="240"></canvas></div>
+    <div class="bead-palette" id="board-palette" style="margin-top:10px"></div>
+    <div class="draw-controls">
+      <button class="big-btn ghost" onclick="boardClear()">🗑️ Wyczyść</button>
+      <button class="big-btn cyan" onclick="boardErase()" id="board-erase-btn">🧽 Gumka</button>
+    </div></div></div>
+
+<!-- ========== CERTYFIKAT ========== -->
+<div class="screen" id="s-cert" style="background:linear-gradient(160deg,#0a1628,#241a40,#0d2444);overflow-y:auto">
+  <button class="back-btn" onclick="goBack()">← Mapa</button>
+  <div class="game-screen"><div id="cert-box"></div>
+    <button class="big-btn" onclick="window.print()" style="margin-top:16px">🖨️ Wydrukuj</button></div></div>
+
+<!-- ========== OVERLAYS ========== -->
+<div id="hint-layer"></div>
+<div class="hint-toast" id="hint-toast"></div>
+<div class="mascot-pop" id="mascot-pop">👽</div>
+<script src="app.js"></script>
+</body>
+</html>
