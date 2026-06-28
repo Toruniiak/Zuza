@@ -424,6 +424,28 @@ const ZONES=[
 ];
 function zoneStars(z){ return z.games.reduce((a,g)=>a+getStars(g),0); }
 function zoneMax(z){ return z.games.length*3; }
+/* ---------- ORYGINALNE MINIATURY SVG (każdy kafelek własna grafika) ---------- */
+let _thumbN=0;
+const ZONE_HUE={z1:42,z2:330,z3:196,z4:140,z5:265,z6:340,z7:8,z8:215,z9:158,z10:34,z11:280};
+function _hue(id){ let h=7; for(const ch of String(id)) h=(h*31+ch.charCodeAt(0))%360; return h; }
+function thumbColors(id){ const h=(ZONE_HUE[id]!=null)?ZONE_HUE[id]:_hue(id); return ['hsl('+h+',88%,64%)','hsl('+((h+38)%360)+',82%,44%)']; }
+/* miniatura: gradient + połysk + iskierki + glif (emoji) — wygląda jak kafelek z gry */
+function svgThumb(id,glyph,size){
+  size=size||96; const [c1,c2]=thumbColors(id); const gid='tg'+(_thumbN++);
+  const fs= (glyph && [...glyph].length>1)?34:52;
+  return '<svg class="thumb-svg" viewBox="0 0 100 100" width="'+size+'" height="'+size+'" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+c1+'"/><stop offset="1" stop-color="'+c2+'"/></linearGradient>'
+    +'<radialGradient id="'+gid+'s" cx="0.5" cy="0.28" r="0.7"><stop offset="0" stop-color="#fff" stop-opacity="0.4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>'
+    +'<rect x="3" y="3" width="94" height="94" rx="24" fill="url(#'+gid+')"/>'
+    +'<rect x="3" y="3" width="94" height="94" rx="24" fill="url(#'+gid+'s)"/>'
+    +'<circle cx="22" cy="20" r="3.5" fill="#fff" opacity="0.55"/><circle cx="80" cy="28" r="2.6" fill="#fff" opacity="0.5"/>'
+    +'<circle cx="79" cy="74" r="6" fill="#fff" opacity="0.16"/><circle cx="20" cy="76" r="4" fill="#fff" opacity="0.14"/>'
+    +'<text x="50" y="56" font-size="'+fs+'" text-anchor="middle" dominant-baseline="central">'+glyph+'</text>'
+    +'</svg>';
+}
+const NEW_GAMES=new Set(['z4d','z4e','z3d','z5e']);
+function newBadge(id){ return NEW_GAMES.has(id)?'<div class="badge-new">NEW!</div>':''; }
+
 function renderPortals(){
   refreshHUD();
   const grid=document.getElementById('portal-grid'); grid.innerHTML='';
@@ -433,7 +455,7 @@ function renderPortals(){
     const el=document.createElement('div');
     el.className='portal '+z.cls+((locked||parentLocked)?' locked':'');
     el.innerHTML=`${parentLocked?'<div class="lock-badge">🚫</div>':locked?'<div class="lock-badge">🔒</div>':''}
-      <div class="p-icon">${z.icon}</div>${z.name}
+      <div class="p-thumb">${svgThumb(z.id,z.icon,96)}</div><div class="p-name">${z.name}</div>
       <div class="p-stars">⭐ ${zoneStars(z)}/${zoneMax(z)}</div>`;
     el.onclick=()=>{
       Audio_.sfx('click');
@@ -494,7 +516,7 @@ function renderHub(zoneId){
     const stars=getStars(c.g);
     const card=document.createElement('div');
     card.className='hub-card'+(locked?' locked':'');
-    card.innerHTML=`<div class="hub-card-icon">${c.i}</div>
+    card.innerHTML=`${newBadge(c.g)}<div class="hub-card-thumb">${svgThumb(c.g,c.i,62)}</div>
       <div class="hub-card-text"><h3>${c.t}</h3><p>${c.d}</p></div>
       ${locked?'<div class="card-lock">🔒</div>':`<div class="card-stars">${starStr(stars)}</div>`}`;
     card.onclick=()=>{
@@ -2143,7 +2165,7 @@ function renderShop(){
   SHOP_ITEMS.forEach(it=>{
     const owned=PROGRESS.shop.includes(it.id);
     const card=document.createElement('div'); card.className='shop-item'+(owned?' owned':'');
-    card.innerHTML=`<div class="si-emoji">${it.emoji}</div><div class="si-name">${it.name}</div>
+    card.innerHTML=`<div class="si-thumb">${svgThumb('shop-'+it.id,it.emoji,72)}</div><div class="si-name">${it.name}</div>
       <button class="si-buy" ${owned?'disabled':''}>${owned?'✅ Masz':('🪙 '+it.cost)}</button>`;
     card.querySelector('.si-buy').onclick=()=>buyItem(it.id);
     grid.appendChild(card);
