@@ -1,5 +1,7 @@
 # 🏝️ Edukacyjna Wyspa
 
+> 🥚 **W tym repozytorium znajduje się też gra [Pou Clone](pou-clone/README.md)** — wirtualny zwierzak (Tamagotchi) jako PWA offline, z pełną [dokumentacją techniczną](pou-clone/docs/DOKUMENTACJA.md).
+
 Interaktywna aplikacja edukacyjna **PWA** dla dzieci w wieku **4–7 lat**. Działa w **100% offline**, w jednym pliku HTML — bez instalacji, bez konta, bez internetu po pierwszym wczytaniu.
 
 > Cała aplikacja, grafiki, dźwięki i lektor są generowane lokalnie w przeglądarce. Zero zewnętrznych plików, zero śledzenia, zero reklam.

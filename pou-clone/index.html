@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#7b5cd6">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Pou Clone — wirtualny zwierzak</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ====== HUD: staty + waluty ====== -->
+    <header id="hud">
+      <div id="hud-top">
+        <div id="pou-name-level">
+          <span id="pou-name">Pou</span>
+          <span id="pou-level" class="badge">Lv 1</span>
+        </div>
+        <div id="currencies">
+          <span class="currency" id="cur-coins" title="Monety">🪙 <b id="coins-val">0</b></span>
+          <span class="currency" id="cur-gems" title="Gemy">💎 <b id="gems-val">0</b></span>
+        </div>
+      </div>
+      <div id="xp-wrap"><div id="xp-bar"></div><span id="xp-label"></span></div>
+      <div id="stat-bars">
+        <div class="stat" data-stat="hunger"><span class="stat-ico">🍔</span><div class="bar"><div class="fill"></div></div></div>
+        <div class="stat" data-stat="hygiene"><span class="stat-ico">🧼</span><div class="bar"><div class="fill"></div></div></div>
+        <div class="stat" data-stat="energy"><span class="stat-ico">⚡</span><div class="bar"><div class="fill"></div></div></div>
+        <div class="stat" data-stat="fun"><span class="stat-ico">🎈</span><div class="bar"><div class="fill"></div></div></div>
+      </div>
+    </header>
+
+    <!-- ====== Pokój ====== -->
+    <main id="room-view">
+      <div id="room-decor"></div>
+      <canvas id="pou-canvas"></canvas>
+      <div id="room-title"></div>
+      <div id="room-ui"></div>
+      <div id="sleep-overlay" class="hidden"><div id="sleep-zzz">💤</div></div>
+      <div id="fx-layer"></div>
+    </main>
+
+    <!-- ====== Nawigacja pokoi ====== -->
+    <nav id="room-nav"></nav>
+
+    <!-- ====== Modal (sklep, gry, ustawienia...) ====== -->
+    <div id="modal-backdrop" class="hidden">
+      <div id="modal">
+        <div id="modal-header">
+          <span id="modal-title"></span>
+          <button id="modal-close" aria-label="Zamknij">✕</button>
+        </div>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- ====== Pełnoekranowa mini-gra ====== -->
+    <div id="game-screen" class="hidden">
+      <div id="game-hud">
+        <span id="game-score">0</span>
+        <span id="game-lives"></span>
+        <button id="game-quit">✕</button>
+      </div>
+      <canvas id="game-canvas"></canvas>
+      <div id="game-msg" class="hidden"></div>
+    </div>
+
+    <div id="toast-wrap"></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/pou.js"></script>
+  <script src="js/minigames.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "Pou Clone — wirtualny zwierzak",
+  "short_name": "Pou Clone",
+  "description": "Wirtualny zwierzak w stylu Tamagotchi: karm, myj, baw się i graj w mini-gry. Działa w 100% offline.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#1c1633",
+  "theme_color": "#7b5cd6",
+  "lang": "pl",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
