@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Car Tracker Detector</string>
+
+    <!-- Home -->
+    <string name="home_title">🔍 SKANUJ SAMOCHÓD</string>
+    <string name="home_start_scan">ROZPOCZNIJ SKANOWANIE</string>
+    <string name="home_status_ready">Gotowy do skanowania</string>
+    <string name="home_full_scan_mode">PEŁNE SKANOWANIE (60 s)</string>
+    <string name="home_quick_scan_mode">Szybki skan</string>
+    <string name="home_disclaimer_title">Zanim zaczniesz</string>
+    <string name="home_disclaimer_body">Ta aplikacja wykrywa TYLKO urządzenia emitujące sygnał Bluetooth Low
+        Energy w zasięgu telefonu. Nie każdy lokalizator GPS korzysta z Bluetooth — część działa wyłącznie
+        w sieci komórkowej (GSM/LTE), której telefon nie potrafi w ten sposób przeszukać. Wynik skanu to
+        zawsze lista potencjalnie podejrzanych urządzeń, nigdy stuprocentowa pewność.</string>
+    <string name="home_menu_history">Historia skanów</string>
+    <string name="home_menu_privacy">Prywatność i uprawnienia</string>
+    <string name="home_menu_car_map">Gdzie szukać?</string>
+
+    <!-- Permissions -->
+    <string name="permissions_title">Wymagane uprawnienia</string>
+    <string name="permissions_explanation_scan_legacy">Na tej wersji Androida skanowanie Bluetooth wymaga
+        uprawnienia lokalizacji (ACCESS_FINE_LOCATION). To wymóg systemu Android, nie tej aplikacji — Android
+        traktuje wyniki skanu BLE jako potencjalnie ujawniające lokalizację. Aplikacja NIE zapisuje ani nie
+        wysyła Twojej lokalizacji GPS.</string>
+    <string name="permissions_explanation_scan_modern">Aplikacja prosi wyłącznie o uprawnienie \"Urządzenia w
+        pobliżu\" (BLUETOOTH_SCAN), oznaczone jako niezwiązane z lokalizacją. Nie prosimy o dostęp do
+        lokalizacji, ponieważ nie jest nam potrzebny.</string>
+    <string name="permissions_grant_button">Nadaj uprawnienia</string>
+    <string name="permissions_denied_message">Bez tego uprawnienia Android nie pozwala na skanowanie
+        Bluetooth Low Energy — to ograniczenie systemu.</string>
+    <string name="permissions_open_settings">Otwórz ustawienia aplikacji</string>
+
+    <!-- Bluetooth state -->
+    <string name="bluetooth_disabled_title">Bluetooth jest wyłączony</string>
+    <string name="bluetooth_disabled_body">Włącz Bluetooth w telefonie, aby rozpocząć skanowanie.</string>
+    <string name="bluetooth_enable_button">Włącz Bluetooth</string>
+    <string name="bluetooth_not_supported_title">Ten telefon nie obsługuje Bluetooth Low Energy</string>
+    <string name="bluetooth_not_supported_body">Aplikacja nie może działać na tym urządzeniu — brak wymaganego
+        sprzętu BLE.</string>
+
+    <!-- Scanning -->
+    <string name="scanning_title">SKANOWANIE W TOKU</string>
+    <string name="scanning_time_label">Czas skanowania</string>
+    <string name="scanning_devices_found_label">Znalezione urządzenia</string>
+    <string name="scanning_suspicious_label">Potencjalnie podejrzane</string>
+    <string name="scanning_current_signal_label">Aktualny poziom sygnału</string>
+    <string name="scanning_stop">ZATRZYMAJ SKANOWANIE</string>
+    <string name="scanning_error_title">Błąd skanowania</string>
+    <string name="scanning_error_retry">Spróbuj ponownie</string>
+    <string name="scanning_no_results_title">Nie znaleziono żadnych urządzeń</string>
+    <string name="scanning_no_results_body">To dobra wiadomość, ale pamiętaj o ograniczeniach aplikacji
+        (sekcja Prywatność) — część lokalizatorów nie emituje Bluetooth.</string>
+
+    <!-- Results -->
+    <string name="results_title">WYNIK SKANOWANIA</string>
+    <string name="results_devices_found">%1$d urządzeń znalezionych</string>
+    <string name="results_scan_again">SKANUJ PONOWNIE</string>
+    <string name="results_technical_mode">Tryb techniczny</string>
+    <string name="results_empty">Brak wykrytych urządzeń w tej sesji.</string>
+
+    <!-- Device detail -->
+    <string name="device_detail_title">Szczegóły</string>
+    <string name="device_detail_name">Nazwa</string>
+    <string name="device_detail_rssi">RSSI</string>
+    <string name="device_detail_manufacturer">Producent</string>
+    <string name="device_detail_first_seen">Pierwsze wykrycie</string>
+    <string name="device_detail_last_seen">Ostatnie wykrycie</string>
+    <string name="device_detail_detections">Wykrycia</string>
+    <string name="device_detail_assessment">Ocena</string>
+    <string name="device_detail_locate">SPRÓBUJ ZLOKALIZOWAĆ</string>
+    <string name="device_detail_mark_mine">To moje urządzenie</string>
+    <string name="device_detail_ignore">Ignoruj</string>
+    <string name="device_detail_watch">Obserwuj</string>
+    <string name="device_detail_unmark">Cofnij oznaczenie</string>
+    <string name="device_detail_why_this_score">Dlaczego taka ocena?</string>
+    <string name="device_detail_unknown_value">Nieznane / niedostępne</string>
+
+    <!-- Locate source -->
+    <string name="locate_title">ZNAJDŹ ŹRÓDŁO SYGNAŁU</string>
+    <string name="locate_signal_label">Sygnał</string>
+    <string name="locate_trend_rising">Sygnał rośnie — prawdopodobnie zbliżasz się do urządzenia.</string>
+    <string name="locate_trend_falling">Sygnał słabnie — prawdopodobnie oddalasz się od urządzenia.</string>
+    <string name="locate_trend_stable">Sygnał stabilny.</string>
+    <string name="locate_trend_insufficient">Zbieranie danych… przejdź powoli po samochodzie.</string>
+    <string name="locate_disclaimer">RSSI to orientacyjny wskaźnik siły sygnału, nie dokładny pomiar
+        odległości — metal karoserii i odbicia mogą go zaburzać.</string>
+    <string name="locate_device_lost">Utracono sygnał urządzenia. Wróć do poprzedniego miejsca.</string>
+
+    <!-- Car map -->
+    <string name="car_map_title">GDZIE SZUKAĆ?</string>
+    <string name="car_map_disclaimer">To lista kontrolna typowych miejsc, w których montuje się
+        akcesoria lub ukrywa przedmioty — NIE oznacza to, że urządzenie na pewno tam jest.</string>
+    <string name="car_map_dashboard">Pod deską rozdzielczą</string>
+    <string name="car_map_under_seats">Pod siedzeniami</string>
+    <string name="car_map_glovebox">Schowek</string>
+    <string name="car_map_trunk">Bagażnik</string>
+    <string name="car_map_wheel_arches">Nadkola</string>
+    <string name="car_map_battery">Okolice akumulatora</string>
+    <string name="car_map_fuse_box">Okolice bezpieczników</string>
+    <string name="car_map_undercarriage">Podwozie</string>
+
+    <!-- History -->
+    <string name="history_title">Historia skanów</string>
+    <string name="history_empty">Brak zapisanych skanów. Historia jest przechowywana wyłącznie lokalnie,
+        na tym telefonie.</string>
+    <string name="history_item_summary">%1$d urządzeń · %2$d podejrzanych</string>
+    <string name="history_delete">Usuń</string>
+    <string name="history_delete_all">Wyczyść całą historię</string>
+
+    <!-- Privacy -->
+    <string name="privacy_title">Prywatność</string>
+    <string name="privacy_local_first_title">Aplikacja lokalna (local-first)</string>
+    <string name="privacy_local_first_body">Brak konta, brak serwera, brak analityki, brak reklam, brak
+        wysyłania jakichkolwiek danych — cała historia skanów i lista Twoich urządzeń zostają wyłącznie na
+        tym telefonie, w lokalnej bazie danych.</string>
+    <string name="privacy_permissions_title">Jakich uprawnień używamy i dlaczego</string>
+    <string name="privacy_limitations_title">Czego aplikacja NIE potrafi</string>
+    <string name="privacy_limitations_body">
+        • Nie wykrywa lokalizatorów działających wyłącznie przez sieć komórkową (GSM/LTE) — telefon nie ma
+        takiego dostępu.\n
+        • Nie wykrywa urządzeń, które nie nadają żadnego sygnału radiowego (wyłączonych, w trybie uśpienia
+        bez advertisingu).\n
+        • Nie posiada dedykowanego sprzętu do detekcji RF — korzysta wyłącznie z odbiornika Bluetooth Low
+        Energy wbudowanego w telefon.\n
+        • Wynik \"potencjalnie podejrzane\" nie jest dowodem — to wskazówka do fizycznej weryfikacji.\n
+        • Niektóre urządzenia BLE losowo zmieniają adres MAC, co może w rzadkich przypadkach rozdzielić to
+        samo urządzenie na dwa wpisy.
+    </string>
+    <string name="privacy_delete_data">Usuń wszystkie dane aplikacji</string>
+
+    <!-- Technical mode -->
+    <string name="technical_mode_title">Tryb techniczny</string>
+    <string name="technical_manufacturer_data">Manufacturer Data</string>
+    <string name="technical_service_uuid">Service UUID</string>
+    <string name="technical_packet_count">Liczba obserwacji</string>
+    <string name="technical_presence_duration">Czas obecności w skanie</string>
+    <string name="technical_rssi_history">Historia RSSI</string>
+
+    <!-- Full scan procedure -->
+    <string name="procedure_title">Procedura pełnego skanowania</string>
+    <string name="procedure_step_1">1. Zaparkuj samochód.</string>
+    <string name="procedure_step_2">2. Wyłącz silnik.</string>
+    <string name="procedure_step_3">3. Zamknij drzwi.</string>
+    <string name="procedure_step_4">4. Jeśli to możliwe, wyłącz Bluetooth w swoich własnych urządzeniach.</string>
+    <string name="procedure_step_5">5. Rozpocznij skanowanie.</string>
+    <string name="procedure_step_6">6. Przejdź wokół samochodu.</string>
+    <string name="procedure_step_7">7. Wejdź do środka.</string>
+    <string name="procedure_step_8">8. Sprawdź urządzenia wykrywane wielokrotnie.</string>
+    <string name="procedure_step_9">9. Zbliż się do podejrzanego sygnału (\"Znajdź źródło sygnału\").</string>
+    <string name="procedure_step_10">10. Sprawdź fizycznie samochód (\"Gdzie szukać?\").</string>
+    <string name="procedure_start">Rozumiem, zaczynamy</string>
+</resources>
