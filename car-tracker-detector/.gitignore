@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+local.properties
+.cxx/
+captures/
+
+# Room schema history (generowane, nie edytuj ręcznie)
+app/schemas/
+
+# Logi
+*.log
+
+# macOS / Windows
+.DS_Store
+Thumbs.db

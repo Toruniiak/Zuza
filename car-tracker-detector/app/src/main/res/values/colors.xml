@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ciemna, techniczna paleta - czytelna w nocy/w samochodzie (punkt 15 specyfikacji). -->
+    <color name="background_dark">#0A0E14</color>
+    <color name="surface_dark">#131A24</color>
+    <color name="radar_green">#00E676</color>
+    <color name="accent_cyan">#22D3EE</color>
+    <color name="risk_low">#22C55E</color>
+    <color name="risk_unknown">#EAB308</color>
+    <color name="risk_suspicious">#F97316</color>
+    <color name="risk_high">#EF4444</color>
+    <color name="ic_launcher_background">#0A0E14</color>
+</resources>

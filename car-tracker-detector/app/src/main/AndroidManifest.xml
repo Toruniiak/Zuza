@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Aplikacja wymaga fizycznego radia Bluetooth Low Energy. Bez BLE aplikacja nie ma
+         żadnej funkcji, więc required="true" jest właściwe (nie ukrywamy tego w Google Play). -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <!-- API 26-30: skanowanie BLE historycznie wymagało "klasycznych" uprawnień BLUETOOTH /
+         BLUETOOTH_ADMIN (normalne, przyznawane automatycznie) ORAZ runtime ACCESS_FINE_LOCATION,
+         ponieważ wynik skanu BLE technicznie mógł ujawniać przybliżoną lokalizację. -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="30" />
+
+    <!-- API 31+: nowe, dedykowane uprawnienie BLUETOOTH_SCAN. Deklarujemy
+         neverForLocation="true", ponieważ ta aplikacja NIGDY nie wylicza fizycznej lokalizacji
+         użytkownika z wyników skanu BLE (używa RSSI wyłącznie do względnej analizy "bliżej/dalej"
+         w obrębie samochodu) — dzięki temu NIE musimy prosić o ACCESS_FINE_LOCATION na API 31+.
+         Celowo NIE deklarujemy BLUETOOTH_CONNECT: aplikacja nigdy nie łączy się (GATT) ani nie
+         paruje się z żadnym urządzeniem — czyta wyłącznie pasywne dane z pakietów advertising,
+         do czego BLUETOOTH_CONNECT nie jest wymagany. -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s" />
+
+    <application
+        android:name=".CarTrackerDetectorApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CarTrackerDetector">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CarTrackerDetector"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
